@@ -43,21 +43,15 @@ export const mockUsers: AppUser[] = rawUsers.map(([fullName, username], index) =
   email: `${username}@example.com`,
 }));
 
-// Users that the current user follows (14 -> 2 pages)
+
 export const followingUsers: AppUser[] = mockUsers.slice(0, 14);
 
-// Users that follow the current user (15 -> 2 pages). Some of them are not followed back.
+
 export const followerUsers: AppUser[] = mockUsers.slice(8, 23);
 
 const sampleBodies = [
-  "¡Hola mundo! Este es mi primer tweet.",
-  "Hoy aprendí algo nuevo sobre React.",
-  "Terminando el taller de programación, ¡qué cansancio!",
-  "¿Alguien tiene recomendaciones de series?",
-  "Firebase es muy útil para la autenticación.",
-  "Buenos días a todos, feliz inicio de semana.",
-  "Git me salvó el día con una buena rama.",
-  "Café y código, la mejor combinación.",
+  "Hola, este es mi primer tweet.",
+
 ];
 
 export const mockTweets: Tweet[] = Array.from({ length: 40 }, (_, index) => {
@@ -71,7 +65,7 @@ export const mockTweets: Tweet[] = Array.from({ length: 40 }, (_, index) => {
   };
 });
 
-// Fake counters for any user (replaced by real queries in Milestone 3)
+
 export const getFollowCounts = (username: string) => {
   if (username === currentUser.username) {
     return { followers: followerUsers.length, following: followingUsers.length };
