@@ -26,7 +26,7 @@ export const SupportPage = () => {
                                     </div>
                                     <div className="col-md-12">
                                         <div className="mb-3">
-                                            <textarea className="form-control bg-light" placeholder="Your message" rows="4"></textarea>
+                                           <textarea className="form-control bg-light" placeholder="Your message" rows={4}></textarea>
                                         </div>
                                     </div>
                                     <div className="col-md-4">
