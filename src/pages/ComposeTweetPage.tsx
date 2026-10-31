@@ -19,13 +19,13 @@ export const ComposeTweetPage = () => {
     <section className="container py-4">
       <div className="row justify-content-center">
         <div className="col-md-8 col-lg-6">
-          <h2 className="h4 mb-3">Publicar tweet</h2>
+          <h2 className="h4 page-title">Publicar tweet</h2>
 
           <form onSubmit={onSubmit}>
             <div className="mb-3">
     
               <textarea
-                className="form-control"
+                className="form-control border-0 fs-5"
                 rows={5}
                 placeholder="¿Qué está pasando?"
                 value={body}

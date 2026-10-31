@@ -13,12 +13,11 @@ export const NavBar = () => {
 
   return (
 
-    <nav className="navbar navbar-expand-md bg-dark navbar-dark">
+<nav className="navbar navbar-expand-md navbar-dark sticky-top x-navbar">
       <div className="container">
         {/* Logo link*/}
-        <Link to="/" className="navbar-brand fw-bold">
+      <span className="fs-3 me-2">𝕏</span>
           Clon de X
-        </Link>
 
         <button
           className="navbar-toggler"
@@ -54,12 +53,12 @@ export const NavBar = () => {
             {authState.logged ? (
               <>
                 <li className="nav-item">
-                  {/* Username of the connected user */}
-                  <span className="navbar-text me-md-3">@{authState.user?.username || authState.user?.email}</span>
+              
+                  <span className="navbar-text text-secondary me-md-3">@{authState.user?.username || authState.user?.email}</span>
                 </li>
                 <li className="nav-item">
-                  {/* Logout link */}
-                  <button type="button" className="btn btn-link nav-link" onClick={onLogout}>
+            
+                  <button type="button" className="btn btn-outline-light btn-sm" onClick={onLogout}>
                     Cerrar sesión
                   </button>
                 </li>

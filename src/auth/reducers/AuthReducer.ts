@@ -1,30 +1,32 @@
 import type { AuthReducerAction, AuthState } from "../types/AuthReducerInterfaces";
 
+export const AuthReducer = (state: AuthState, action: AuthReducerAction): AuthState => {
+  switch (action.type) {
+    case "login":
+      return {
+        logged: true,
+        checking: false,
+        user: action.payload?.user ?? null,
+        errorMessage: null,
+      };
 
-export const AuthReducer = ( state : AuthState, action : AuthReducerAction ) => {
+    case "logout":
+      return {
+        logged: false,
+        checking: false,
+        user: null,
+        errorMessage: null,
+      };
 
-    switch (action.type) {
-        case "login":
-            return {
-                ... state,
-                logged : true,
-                user: action.payload.user
-            }
-            
-        case "logout":
-            return {
-                ...state,
-                ...action.payload
-            }
-        
-        case "error":
-            return {
-                logged : false,
-                user : null,
-                errorMessage : action.payload.errorMessage
-            }
-    
-        default:
-            return state;
-    }
-}
+    case "error":
+      return {
+        logged: false,
+        checking: false,
+        user: null,
+        errorMessage: action.payload?.errorMessage ?? null,
+      };
+
+    default:
+      return state;
+  }
+};

@@ -31,7 +31,7 @@ export const UserTweetsPage = () => {
   return (
     <section className="container py-4">
       <div className="row justify-content-center">
-        <div className="col-md-8 col-lg-6">
+     <div className="col-md-8 col-lg-6 x-column p-0">
           <div className="text-center mb-4">
             <h2 className="mb-0">{user.fullName}</h2>
             <p className="text-muted">@{user.username}</p>

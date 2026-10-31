@@ -1,76 +1,88 @@
-import { useReducer, type ReactNode } from "react"
-import { AuthContext } from "./AuthContext"
-import { AuthReducer } from "../reducers/AuthReducer"
-import type { AuthReducerAction, AuthState, User } from "../types/AuthReducerInterfaces"
-import { loginUserByCredentials } from "../../firebase/providers"
+import { useEffect, useReducer, type ReactNode } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { AuthContext } from "./AuthContext";
+import { AuthReducer } from "../reducers/AuthReducer";
+import type { AuthState } from "../types/AuthReducerInterfaces";
+import { FirebaseAuth } from "../../firebase/config";
+import {
+  loginUserByCredentials,
+  loginUserWithGoogle,
+  logoutFirebase,
+  type AuthResult,
+} from "../../firebase/providers";
 
-const initialState = {
-    logged: false,
-    user: null
-} as AuthState
+const initialState: AuthState = {
+  logged: false,
+  checking: true,
+  user: null,
+  errorMessage: null,
+};
 
 interface AuthProviderProps {
-    children: ReactNode
+  children: ReactNode;
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [authState, dispatch] = useReducer(AuthReducer, initialState);
 
-    const [authState, dispatch] = useReducer(AuthReducer, initialState)
-
-    const login = async (email: string, password: string): Promise<boolean> => {
-
-        const { ok, uid, photoURL, displayName, errorMessage } = await loginUserByCredentials(email, password)
-
-
-
-        if (ok) {
-            const user = {
-                uid,
-                email,
-                photoURL,
-                username: displayName,
-            } as User;
-
-            const action = {
-                type: "login",
-                payload: {
-                    logged: true,
-                    user
-                }
-            } as AuthReducerAction
-
-            dispatch(action);
-            return true;
-        } else {
-            const action = {
-                type : 'error',
-                payload : {
-                    logged : false,
-                    user : null,
-                    errorMessage: errorMessage
-                }
-            } as AuthReducerAction
-
-            dispatch(action);
-            return false;
-        }
-    }
-
-    const logout = () : boolean => {
+  // Firebase tells us whether there is an active session (it also works after refreshing the page).
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(FirebaseAuth, (firebaseUser) => {
+      if (firebaseUser) {
         dispatch({
-            type: "logout",
-            payload: {
-                logged: false,
-                user: null,
-                errorMessage : null
-            }
+          type: "login",
+          payload: {
+            user: {
+              uid: firebaseUser.uid,
+              email: firebaseUser.email ?? "",
+              photoURL: firebaseUser.photoURL,
+              username: firebaseUser.displayName,
+            },
+          },
         });
-        return true;
+      } else {
+        dispatch({ type: "logout" });
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
+  // Common logic for email/password and Google sign in.
+  const handleAuthResult = (result: AuthResult): boolean => {
+    if (result.ok) {
+      dispatch({
+        type: "login",
+        payload: {
+          user: {
+            uid: result.uid,
+            email: result.email,
+            photoURL: result.photoURL,
+            username: result.displayName,
+          },
+        },
+      });
+      return true;
     }
 
-    return (
-        <AuthContext.Provider value={{ authState, login, logout }}>
-            {children}
-        </AuthContext.Provider>
-    )
-}
+    dispatch({ type: "error", payload: { errorMessage: result.errorMessage } });
+    return false;
+  };
+
+  const login = async (email: string, password: string): Promise<boolean> =>
+    handleAuthResult(await loginUserByCredentials(email, password));
+
+  const loginWithGoogle = async (): Promise<boolean> => handleAuthResult(await loginUserWithGoogle());
+
+  const logout = async (): Promise<boolean> => {
+    await logoutFirebase();
+    dispatch({ type: "logout" });
+    return true;
+  };
+
+  return (
+    <AuthContext.Provider value={{ authState, login, loginWithGoogle, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};

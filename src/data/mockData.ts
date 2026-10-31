@@ -1,10 +1,10 @@
 import type { AppUser, Tweet } from "../types/models";
 
 export const currentUser: AppUser = {
-  uid: "me",
-  fullName: "Tu Nombre Completo",
-  username: "tuusuario",
-  email: "REPLACE_WITH_YOUR_FIREBASE_EMAIL",
+  uid: "1017261775",
+  fullName: "Katerine Pino Zabala",
+  username: "Kate0998",
+  email: "kpino@tdea.edu.co",
 };
 
 const rawUsers: Array<[string, string]> = [
@@ -71,7 +71,6 @@ export const mockTweets: Tweet[] = Array.from({ length: 40 }, (_, index) => {
   };
 });
 
-// Fake counters for any user (replaced by real queries in Milestone 3)
 export const getFollowCounts = (username: string) => {
   if (username === currentUser.username) {
     return { followers: followerUsers.length, following: followingUsers.length };
