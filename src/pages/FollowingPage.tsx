@@ -13,8 +13,8 @@ export const FollowingPage = () => {
   return (
     <section className="container py-4">
       <div className="row justify-content-center">
-        <div className="col-md-8 col-lg-6">
-          <h2 className="h4 mb-3">Seguidos</h2>
+        <div className="col-md-8 col-lg-6 x-column p-0">
+          <h2 className="h4 page-title">Seguidos</h2>
 
           <ul className="list-group">
             {items.map((user) => (

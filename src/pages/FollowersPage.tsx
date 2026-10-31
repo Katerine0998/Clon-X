@@ -20,8 +20,8 @@ export const FollowersPage = () => {
   return (
     <section className="container py-4">
       <div className="row justify-content-center">
-        <div className="col-md-8 col-lg-6">
-          <h2 className="h4 mb-3">Seguidores</h2>
+       <div className="col-md-8 col-lg-6 x-column p-0">
+         <h2 className="h4 page-title">Seguidores</h2>
 
           <ul className="list-group">
             {items.map((user) => (

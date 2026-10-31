@@ -5,13 +5,9 @@ interface FollowCountersProps {
 
 export const FollowCounters = ({ followers, following }: FollowCountersProps) => {
   return (
-    <div className="d-flex justify-content-center gap-4">
-      <span>
-        <strong>{followers}</strong> Seguidores
-      </span>
-      <span>
-        <strong>{following}</strong> Seguidos
-      </span>
-    </div>
+  <div className="d-flex justify-content-center gap-4 text-secondary">
+  <span><strong className="text-body">{followers}</strong> Seguidores</span>
+  <span><strong className="text-body">{following}</strong> Seguidos</span>
+</div>
   );
 };
