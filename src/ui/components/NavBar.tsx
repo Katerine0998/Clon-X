@@ -1,67 +1,86 @@
-import { useContext } from "react"
-import { Link, NavLink, useNavigate } from "react-router-dom"
-import { AuthContext } from "../../auth/contexts/AuthContext"
+import { useContext } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../auth/contexts/AuthContext";
 
 export const NavBar = () => {
+  const { authState, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-    const { authState, logout } = useContext(AuthContext);
-    const navigate = useNavigate();
+  const onLogout = async () => {
+    await logout();
+    navigate("/login", { replace: true });
+  };
 
-    const onLoginButton =  () => {
-        navigate('/login', {
-            replace: true
-        })
-    }
+  return (
 
-    const onlogoutButton = () => {
-        const result = logout();
-        console.log('Logout: ', result)
-    }
+    <nav className="navbar navbar-expand-md bg-dark navbar-dark">
+      <div className="container">
+        {/* Logo link*/}
+        <Link to="/" className="navbar-brand fw-bold">
+          Clon de X
+        </Link>
 
-    return (
-        <>
-            <nav className="navbar sm:navbar-expand bg-1 fg-2">
-                <div className="container-fluid">
-                    <Link to="/" className="navbar-brand">Blog App</Link>
-                    <button className="btn-icon navbar-toggler" type="button" data-bs-toggle="drawer" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon" aria-hidden="true"></span>
-                    </button>
-                    <dialog className="drawer drawer-end" tabindex="-1" id="navbarNav" aria-labelledby="navbarNavLabel">
-                        <div className="drawer-header">
-                            <h5 className="drawer-title" id="navbarNavLabel">Menu</h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="drawer" aria-label="Close"></button>
-                        </div>
-                        <div className="drawer-body">
-                            <ul className="navbar-nav">
-                                <li className="nav-item">
-                                    <NavLink to="/" className="nav-link">Feed</NavLink>
-                                </li>
-                                <li className="nav-item">
-                                    <NavLink to="/about-us" className="nav-link">About Us</NavLink>
-                                </li>
-                                <li className="nav-item">
-                                    <NavLink to="/support" className="nav-link">Need Support?</NavLink>
-                                </li>
-                            </ul> 
-                            {
-                                !authState.logged ? 
-                                (
-                                    <button className="btn-outline theme-success" type="button" onClick={onLoginButton}>Login</button>
-                                )
-                                :
-                                (
-                                    <>
-                                    <button className="btn-outline theme-danger" type="button" onClick={onlogoutButton}>Logout</button>
-                                    <span>{ authState.user.username || authState.user.email }</span>
-                                    </>
-                                )
-                            }
-                        </div>
-                    </dialog>
-                </div>
-            </nav>
-        </>
-    )
-}
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#mainNavbar"
+          aria-controls="mainNavbar"
+          aria-expanded="false"
+          aria-label="Mostrar menú"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
 
+        <div className="collapse navbar-collapse" id="mainNavbar">
+          <ul className="navbar-nav me-auto">
+            {authState.logged && (
+              <>
+                <li className="nav-item">
+                  <NavLink to="/" end className="nav-link">
+                    Inicio
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink to="/feed" className="nav-link">
+                    Feed
+                  </NavLink>
+                </li>
+              </>
+            )}
+          </ul>
 
+          <ul className="navbar-nav ms-auto align-items-md-center">
+            {authState.logged ? (
+              <>
+                <li className="nav-item">
+                  {/* Username of the connected user */}
+                  <span className="navbar-text me-md-3">@{authState.user?.username || authState.user?.email}</span>
+                </li>
+                <li className="nav-item">
+                  {/* Logout link */}
+                  <button type="button" className="btn btn-link nav-link" onClick={onLogout}>
+                    Cerrar sesión
+                  </button>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="nav-item">
+                  <NavLink to="/login" className="nav-link">
+                    Iniciar sesión
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink to="/register" className="nav-link">
+                    Registrarse
+                  </NavLink>
+                </li>
+              </>
+            )}
+          </ul>
+        </div>
+      </div>
+    </nav>
+  );
+};
