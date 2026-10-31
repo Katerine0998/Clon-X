@@ -15,9 +15,10 @@ export const NavBar = () => {
 
 <nav className="navbar navbar-expand-md navbar-dark sticky-top x-navbar">
       <div className="container">
-        {/* Logo link*/}
-      <span className="fs-3 me-2">𝕏</span>
-          Clon de X
+        {/* Logo link */}
+    <Link to="/" className="navbar-brand fw-bold">
+      <span className="fs-3 me-2">𝕏</span>Clon de X
+    </Link>
 
         <button
           className="navbar-toggler"
