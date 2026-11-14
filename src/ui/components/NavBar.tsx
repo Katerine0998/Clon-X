@@ -15,9 +15,10 @@ export const NavBar = () => {
 
 <nav className="navbar navbar-expand-md navbar-dark sticky-top x-navbar">
       <div className="container">
-        {/* Logo link*/}
-      <span className="fs-3 me-2">𝕏</span>
-          Clon de X
+        {/* Logo: link back to the home page */}
+        <Link to="/" className="navbar-brand fs-3 me-2" aria-label="Ir al inicio">
+          𝕏
+        </Link>
 
         <button
           className="navbar-toggler"
@@ -32,7 +33,9 @@ export const NavBar = () => {
         </button>
 
         <div className="collapse navbar-collapse" id="mainNavbar">
+        
           <ul className="navbar-nav me-auto">
+            
             {authState.logged && (
               <>
                 <li className="nav-item">
@@ -45,10 +48,15 @@ export const NavBar = () => {
                     Feed
                   </NavLink>
                 </li>
+
+                <li className="nav-item">
+                  <NavLink to="/tweet" className="nav-link">
+                    Tweet
+                  </NavLink>
+                </li>
               </>
             )}
           </ul>
-
           <ul className="navbar-nav ms-auto align-items-md-center">
             {authState.logged ? (
               <>

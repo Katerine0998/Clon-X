@@ -8,11 +8,11 @@ import { FeedPage } from "../pages/FeedPage";
 import { FollowingPage } from "../pages/FollowingPage";
 import { FollowersPage } from "../pages/FollowersPage";
 import { UserTweetsPage } from "../pages/UserTweetsPage";
+import { NewPostPage } from "../blog/Pages/NewPostPage";
 
 export const BaseRouter = () => {
   return (
     <Routes>
-      {/* Public routes */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
 
@@ -24,6 +24,10 @@ export const BaseRouter = () => {
         <Route path="/following" element={<FollowingPage />} />
         <Route path="/followers" element={<FollowersPage />} />
         <Route path="/user/:username" element={<UserTweetsPage />} />
+        <Route path="/user/:username/following" element={<FollowingPage />} />
+        <Route path="/user/:username/followers" element={<FollowersPage />} />
+        {/* Base example from the course (blog) */}
+        <Route path="/new-post" element={<NewPostPage />} />
       </Route>
 
       <Route path="/*" element={<Navigate to="/" />} />
