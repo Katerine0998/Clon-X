@@ -1,5 +1,16 @@
-import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
+import {
+  GoogleAuthProvider,
+  createUserWithEmailAndPassword,
+  deleteUser,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  updateProfile,
+  type User as FirebaseUser,
+} from "firebase/auth";
 import { FirebaseAuth } from "./config";
+import { createUserProfile, getEmailByUsername, normalizeUsername } from "../services/userService";
+import type { RegisterData } from "../auth/types/AuthReducerInterfaces";
 
 export interface AuthSuccess {
   ok: true;
@@ -16,7 +27,11 @@ export interface AuthFailure {
 
 export type AuthResult = AuthSuccess | AuthFailure;
 
-const getErrorMessage = (error: unknown): string => {
+export const getErrorMessage = (error: unknown): string => {
+  if (error instanceof Error && error.message === "username-taken") {
+    return "Ese nombre de usuario ya está en uso.";
+  }
+
   const code = (error as { code?: string })?.code;
 
   switch (code) {
@@ -25,6 +40,12 @@ const getErrorMessage = (error: unknown): string => {
     case "auth/user-not-found":
     case "auth/invalid-email":
       return "Usuario o contraseña incorrectos.";
+    case "auth/email-already-in-use":
+      return "Ese correo electrónico ya está registrado.";
+    case "auth/weak-password":
+      return "La contraseña debe tener al menos 6 caracteres.";
+    case "permission-denied":
+      return "Firestore rechazó la operación. Revisa que las reglas de seguridad estén publicadas.";
     case "auth/too-many-requests":
       return "Demasiados intentos fallidos. Intenta de nuevo más tarde.";
     case "auth/popup-closed-by-user":
@@ -68,6 +89,49 @@ export const loginUserWithGoogle = async (): Promise<AuthResult> => {
       photoURL: user.photoURL,
     };
   } catch (error) {
+    return { ok: false, errorMessage: getErrorMessage(error) };
+  }
+};
+
+// Registers a new user: creates the Auth account and saves the profile in Firestore.
+// Neither the email nor the username can be repeated.
+export const registerUserByCredentials = async ({
+  fullName,
+  username,
+  email,
+  password,
+}: RegisterData): Promise<AuthResult> => {
+  const cleanUsername = normalizeUsername(username);
+  let createdUser: FirebaseUser | null = null;
+
+  try {
+    // Quick check before creating the account (the transaction below protects against race conditions)
+    if (await getEmailByUsername(cleanUsername)) {
+      return { ok: false, errorMessage: getErrorMessage(new Error("username-taken")) };
+    }
+
+    const credential = await createUserWithEmailAndPassword(FirebaseAuth, email, password);
+    createdUser = credential.user;
+
+    await updateProfile(createdUser, { displayName: fullName.trim() });
+    await createUserProfile({ uid: createdUser.uid, fullName: fullName.trim(), username: cleanUsername, email });
+
+    return {
+      ok: true,
+      uid: createdUser.uid,
+      email,
+      displayName: fullName.trim(),
+      photoURL: null,
+    };
+  } catch (error) {
+    // Roll back: do not leave an Auth account without a profile
+    if (createdUser) {
+      try {
+        await deleteUser(createdUser);
+      } catch {
+        /* nothing else we can do */
+      }
+    }
     return { ok: false, errorMessage: getErrorMessage(error) };
   }
 };
