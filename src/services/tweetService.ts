@@ -1,4 +1,4 @@
-import { addDoc, collection, getDocs, query, serverTimestamp, where, type Timestamp } from "firebase/firestore";
+import { addDoc, collection, getDocs, limit, orderBy, query, serverTimestamp, where, type Timestamp } from "firebase/firestore";
 import { FirebaseDB } from "../firebase/config";
 import type { Tweet } from "../types/models";
 import { sortTweetsNewestFirst } from "../utils/sorting";
@@ -55,4 +55,10 @@ export const getFeedTweets = async (authorUids: string[]): Promise<Tweet[]> => {
   );
 
   return sortTweetsNewestFirst(results.flatMap((snap) => toTweets(snap.docs)));
+};
+
+// Latest tweets from everybody (tab "Para ti" on the home page)
+export const getLatestTweets = async (max = 50): Promise<Tweet[]> => {
+  const snap = await getDocs(query(collection(FirebaseDB, TWEETS), orderBy("createdAt", "desc"), limit(max)));
+  return toTweets(snap.docs);
 };
