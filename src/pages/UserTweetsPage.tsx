@@ -1,50 +1,83 @@
-import { useState } from "react";
-import { useParams } from "react-router-dom";
-import { currentUser, followingUsers, getFollowCounts, mockTweets, mockUsers } from "../data/mockData";
-import { sortTweetsNewestFirst } from "../utils/sorting";
+import { Link, useParams } from "react-router-dom";
+import { useCurrentUser } from "../hooks/useCurrentUser";
+import { useAsyncData } from "../hooks/useAsyncData";
 import { usePagination } from "../hooks/usePagination";
+import { getUserByUsername } from "../services/userService";
+import { getTweetsByUser } from "../services/tweetService";
+import { followUser, getFollowCounts, isFollowing } from "../services/followService";
 import { TweetCard } from "../ui/components/TweetCard";
 import { Pagination } from "../ui/components/Pagination";
 import { FollowCounters } from "../ui/components/FollowCounters";
+import { LoadingState } from "../ui/components/LoadingState";
 
 export const UserTweetsPage = () => {
+  const me = useCurrentUser();
   const { username } = useParams<{ username: string }>();
 
-  const user = username === currentUser.username ? currentUser : mockUsers.find((u) => u.username === username);
-  const isOwnProfile = user?.username === currentUser.username;
+  const { data, loading, error, reload } = useAsyncData(async () => {
+    const user = await getUserByUsername(username ?? "");
+    if (!user) return null;
 
-  const [isFollowing, setIsFollowing] = useState(followingUsers.some((u) => u.username === username));
+    const [tweets, counts, following] = await Promise.all([
+      getTweetsByUser(user.uid),
+      getFollowCounts(user.uid),
+      user.uid === me.uid ? Promise.resolve(true) : isFollowing(me.uid, user.uid),
+    ]);
+    return { user, tweets, counts, following };
+  }, [username, me.uid]);
 
-  const userTweets = sortTweetsNewestFirst(mockTweets.filter((tweet) => tweet.authorUsername === username));
-  const { items, currentPage, totalPages, setPage } = usePagination(userTweets);
+  const { items, currentPage, totalPages, setPage } = usePagination(data?.tweets ?? []);
 
-  if (!user) {
+  const onFollow = async () => {
+    if (!data) return;
+    await followUser(me, data.user);
+    reload();
+  };
+
+  if (loading || error) {
     return (
       <section className="container py-4">
-        <div className="alert alert-warning">Usuario no encontrado.</div>
+        <LoadingState loading={loading} error={error} />
       </section>
     );
   }
 
-  const { followers, following } = getFollowCounts(user.username);
+  if (!data) {
+    return (
+      <section className="container py-4">
+        <div className="alert alert-warning">
+          Usuario no encontrado. <Link to="/">Volver al inicio</Link>
+        </div>
+      </section>
+    );
+  }
+
+  const { user, counts, following } = data;
 
   return (
     <section className="container py-4">
       <div className="row justify-content-center">
-     <div className="col-md-8 col-lg-6 x-column p-0">
+        <div className="col-md-8 col-lg-6 x-column p-0">
           <div className="text-center mb-4">
             <h2 className="mb-0">{user.fullName}</h2>
             <p className="text-muted">@{user.username}</p>
 
-            <FollowCounters followers={followers} following={following} />
+            <FollowCounters
+              followers={counts.followers}
+              following={counts.following}
+              followersTo={`/user/${user.username}/followers`}
+              followingTo={`/user/${user.username}/following`}
+            />
 
             {/* "[Seguir]" button only if the user is not followed yet */}
-            {!isOwnProfile && !isFollowing && (
-              <button type="button" className="btn btn-primary mt-3" onClick={() => setIsFollowing(true)}>
+            {!following && (
+              <button type="button" className="btn btn-primary mt-3" onClick={onFollow}>
                 [Seguir]
               </button>
             )}
           </div>
+
+          {items.length === 0 && <p className="text-secondary text-center py-4">Este usuario aún no ha publicado tweets.</p>}
 
           {items.map((tweet) => (
             <TweetCard key={tweet.id} tweet={tweet} />

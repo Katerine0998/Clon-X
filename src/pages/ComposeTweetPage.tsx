@@ -1,18 +1,41 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useCurrentUser } from "../hooks/useCurrentUser";
+import { MAX_TWEET_LENGTH, publishTweet } from "../services/tweetService";
 
 export const ComposeTweetPage = () => {
+  const me = useCurrentUser();
   const [body, setBody] = useState("");
-  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const onChange = (event: ChangeEvent<HTMLTextAreaElement>) => setBody(event.target.value);
+  const tooLong = body.length > MAX_TWEET_LENGTH;
 
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const onChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setBody(event.target.value);
+    setSuccess(false);
+    setError(null);
+  };
+
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Milestone 2: validate the 280 character limit, save in Firestore and notify the user.
-    console.log("Mock publish:", body);
-    setBody("");
-    navigate("/feed");
+
+    if (tooLong) {
+      setError(`El mensaje no puede superar los ${MAX_TWEET_LENGTH} caracteres.`);
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      await publishTweet(me, body);
+      setBody("");
+      setSuccess(true);
+    } catch (publishError) {
+      setError(publishError instanceof Error ? publishError.message : "No se pudo publicar el tweet.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -22,8 +45,7 @@ export const ComposeTweetPage = () => {
           <h2 className="h4 page-title">Publicar tweet</h2>
 
           <form onSubmit={onSubmit}>
-            <div className="mb-3">
-    
+            <div className="mb-2">
               <textarea
                 className="form-control border-0 fs-5"
                 rows={5}
@@ -34,9 +56,25 @@ export const ComposeTweetPage = () => {
               />
             </div>
 
-            <button type="submit" className="btn btn-primary">
-              [Publicar]
-            </button>
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <small className={tooLong ? "text-danger fw-bold" : "text-secondary"}>
+                {body.length}/{MAX_TWEET_LENGTH}
+              </small>
+              <button type="submit" className="btn btn-primary" disabled={isLoading || !body.trim() || tooLong}>
+                {isLoading ? "Publicando..." : "[Publicar]"}
+              </button>
+            </div>
+
+            {error && (
+              <div className="alert alert-danger" role="alert">
+                {error}
+              </div>
+            )}
+            {success && (
+              <div className="alert alert-success" role="alert">
+                ¡Tweet publicado con éxito! <Link to="/feed">Ver el feed</Link>
+              </div>
+            )}
           </form>
         </div>
       </div>

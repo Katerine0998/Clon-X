@@ -1,7 +1,7 @@
 import { useContext, useState, type ChangeEvent, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
-import { currentUser } from "../../data/mockData";
+import { getEmailByUsername } from "../../services/userService";
 
 const initialForm = {
   username: "",
@@ -9,16 +9,17 @@ const initialForm = {
 };
 
 
-const resolveEmail = (usernameOrEmail: string): string => {
+// People can sign in with their email or with their username (we look the email up in Firestore).
+const resolveEmail = async (usernameOrEmail: string): Promise<string | null> => {
   if (usernameOrEmail.includes("@")) return usernameOrEmail;
-  if (usernameOrEmail === currentUser.username) return currentUser.email;
-  return usernameOrEmail;
+  return getEmailByUsername(usernameOrEmail);
 };
 
 export const LoginPage = () => {
   const { authState, login, loginWithGoogle } = useContext(AuthContext);
   const [form, setForm] = useState(initialForm);
   const [isLoading, setIsLoading] = useState(false);
+  const [localError, setLocalError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -29,10 +30,22 @@ export const LoginPage = () => {
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
-    const ok = await login(resolveEmail(form.username.trim()), form.password);
-    setIsLoading(false);
+    setLocalError(null);
 
-    if (ok) navigate("/", { replace: true });
+    try {
+      const email = await resolveEmail(form.username.trim());
+      if (!email) {
+        setLocalError("Usuario o contraseña incorrectos.");
+        return;
+      }
+
+      const ok = await login(email, form.password);
+      if (ok) navigate("/", { replace: true });
+    } catch {
+      setLocalError("No se pudo iniciar sesión. Revisa las reglas de Firestore e inténtalo de nuevo.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const onGoogleSignIn = async () => {
@@ -80,9 +93,9 @@ export const LoginPage = () => {
                   />
                 </div>
 
-                {authState.errorMessage && (
+                {(localError || authState.errorMessage) && (
                   <div className="alert alert-danger" role="alert">
-                    {authState.errorMessage}
+                    {localError ?? authState.errorMessage}
                   </div>
                 )}
 

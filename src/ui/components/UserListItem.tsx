@@ -4,7 +4,7 @@ import type { AppUser } from "../../types/models";
 interface UserListItemProps {
   user: AppUser;
   showFollowButton?: boolean;
-  onFollow?: (username: string) => void;
+  onFollow?: () => void;
 }
 
 export const UserListItem = ({ user, showFollowButton = false, onFollow }: UserListItemProps) => {
@@ -19,7 +19,7 @@ export const UserListItem = ({ user, showFollowButton = false, onFollow }: UserL
 
       {showFollowButton && (
         // STYLE: change "btn-primary" to "btn-outline-primary", "btn-dark", etc.
-        <button type="button" className="btn btn-light btn-sm" onClick={() => onFollow?.(user.username)}>
+        <button type="button" className="btn btn-light btn-sm" onClick={() => onFollow?.()}>
           [Seguir]
         </button>
       )}

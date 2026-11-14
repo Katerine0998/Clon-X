@@ -2,7 +2,8 @@ export interface User {
   uid: string;
   email: string;
   photoURL: string | null;
-  username: string | null;
+  fullName: string;
+  username: string;
 }
 
 export interface AuthState {
@@ -20,4 +21,11 @@ export interface AuthReducerAction {
     user?: User | null;
     errorMessage?: string | null;
   };
+}
+
+export interface RegisterData {
+  fullName: string;
+  username: string;
+  email: string;
+  password: string;
 }
