@@ -1,4 +1,4 @@
-import { collection, doc, getCountFromServer, getDoc, getDocs, query, serverTimestamp, setDoc, where } from "firebase/firestore";
+import { collection, doc, getCountFromServer, getDoc, getDocs,limit, query, serverTimestamp, setDoc, where } from "firebase/firestore";
 import { FirebaseDB } from "../firebase/config";
 import type { AppUser } from "../types/models";
 
@@ -56,4 +56,18 @@ export const getFollowCounts = async (uid: string): Promise<{ followers: number;
     getCountFromServer(query(collection(FirebaseDB, FOLLOWS), where("followerUid", "==", uid))),
   ]);
   return { followers: followers.data().count, following: following.data().count };
+};
+
+// Up to `max` users that the person does not follow yet (for the "A quién seguir" box)
+export const getSuggestedUsers = async (uid: string, max = 4): Promise<AppUser[]> => {
+  const [usersSnap, following] = await Promise.all([
+    getDocs(query(collection(FirebaseDB, "users"), limit(30))),
+    getFollowing(uid),
+  ]);
+  const followedUids = new Set(following.map((user) => user.uid));
+
+  return usersSnap.docs
+    .map((d) => ({ uid: d.id, fullName: d.data().fullName as string, username: d.data().username as string }))
+    .filter((user) => user.uid !== uid && !followedUids.has(user.uid))
+    .slice(0, max);
 };

@@ -9,21 +9,21 @@ interface FollowCountersProps {
 }
 
 export const FollowCounters = ({ followers, following, followersTo, followingTo }: FollowCountersProps) => {
-  const followersContent = (
-    <>
-      <strong className="text-body">{followers}</strong> Seguidores
-    </>
-  );
   const followingContent = (
     <>
       <strong className="text-body">{following}</strong> Seguidos
     </>
   );
+  const followersContent = (
+    <>
+      <strong className="text-body">{followers}</strong> Seguidores
+    </>
+  );
 
   return (
-    <div className="d-flex justify-content-center gap-4 text-secondary">
-      {followersTo ? <Link to={followersTo} className="text-secondary text-decoration-none">{followersContent}</Link> : <span>{followersContent}</span>}
-      {followingTo ? <Link to={followingTo} className="text-secondary text-decoration-none">{followingContent}</Link> : <span>{followingContent}</span>}
+    <div className="d-flex gap-4 text-secondary">
+      {followingTo ? <Link to={followingTo} className="text-secondary">{followingContent}</Link> : <span>{followingContent}</span>}
+      {followersTo ? <Link to={followersTo} className="text-secondary">{followersContent}</Link> : <span>{followersContent}</span>}
     </div>
   );
 };

@@ -48,25 +48,23 @@ export const FollowByUsernameForm = ({ currentUser, onFollowed }: FollowByUserna
   };
 
   return (
-    <form onSubmit={onSubmit} className="mt-4 text-start">
-      <label htmlFor="followUsername" className="form-label">
-        Seguir a alguien por su nombre de usuario
-      </label>
-      <div className="input-group">
+    <form onSubmit={onSubmit} className="x-follow-form">
+      <div className="x-pill">
+        <i className="bi bi-at text-secondary"></i>
         <input
           id="followUsername"
           type="text"
-          className="form-control"
-          placeholder="@usuario"
+          placeholder="nombre de usuario"
+          aria-label="Seguir a alguien por su nombre de usuario"
           value={username}
           onChange={(event) => setUsername(event.target.value)}
         />
-        <button type="submit" className="btn btn-primary" disabled={isLoading || !username.trim()}>
+        <button type="submit" className="btn btn-light btn-sm" disabled={isLoading || !username.trim()}>
           [Seguir]
         </button>
       </div>
       {feedback && (
-        <div className={`alert alert-${feedback.kind} mt-3 mb-0`} role="alert">
+        <div className={`alert alert-${feedback.kind} py-2 mt-2 mb-0`} role="alert">
           {feedback.text}
         </div>
       )}

@@ -17,7 +17,7 @@ export const NavBar = () => {
       <div className="container">
         {/* Logo link */}
     <Link to="/" className="navbar-brand fw-bold">
-      <span className="fs-3 me-2">𝕏</span>Clon de X
+      <span className="fs-3 me-2"></span>Clon de 𝕏
     </Link>
 
         <button
