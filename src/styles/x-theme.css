@@ -1,3 +1,8 @@
+/* =====================================================================
+   Tema oscuro tipo X (Bootstrap 5.3) - reemplaza todo el archivo
+   ===================================================================== */
+
+/* ---------- 1. Colores base ---------- */
 [data-bs-theme="dark"] {
   --bs-body-bg: #000000;
   --bs-body-color: #E7E9EA;
@@ -8,55 +13,136 @@
   --bs-link-hover-color-rgb: 26, 140, 216;
   --bs-body-font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
+html, body { background-color: #000; }
+a { text-decoration: none; }
+a:hover { text-decoration: underline; }
 
-/* Botones tipo X: píldora y negrita */
+/* ---------- 2. Botones: píldora y en negrita ---------- */
 .btn { border-radius: 9999px; font-weight: 700; padding: .55rem 1.25rem; }
-.btn-sm { padding: .3rem .9rem; }
+.btn-sm { padding: .3rem .95rem; font-size: .9rem; }
 
 .btn-primary {
   --bs-btn-bg: #1D9BF0; --bs-btn-border-color: #1D9BF0; --bs-btn-color: #fff;
   --bs-btn-hover-bg: #1A8CD8; --bs-btn-hover-border-color: #1A8CD8; --bs-btn-hover-color: #fff;
-  --bs-btn-active-bg: #1A8CD8; --bs-btn-active-border-color: #1A8CD8;
-  --bs-btn-disabled-bg: #1D9BF0; --bs-btn-disabled-border-color: #1D9BF0;
+  --bs-btn-active-bg: #1A8CD8; --bs-btn-active-border-color: #1A8CD8; --bs-btn-active-color: #fff;
+  --bs-btn-disabled-bg: #1D9BF0; --bs-btn-disabled-border-color: #1D9BF0; --bs-btn-disabled-color: #fff;
+}
+.btn-light {
+  --bs-btn-bg: #EFF3F4; --bs-btn-border-color: #EFF3F4; --bs-btn-color: #0F1419;
+  --bs-btn-hover-bg: #D7DBDC; --bs-btn-hover-border-color: #D7DBDC; --bs-btn-hover-color: #0F1419;
+  --bs-btn-active-bg: #D7DBDC; --bs-btn-active-border-color: #D7DBDC; --bs-btn-active-color: #0F1419;
+}
+.btn-outline-light {
+  --bs-btn-color: #EFF3F4; --bs-btn-border-color: #536471;
+  --bs-btn-hover-bg: rgba(239,243,244,.1); --bs-btn-hover-color: #EFF3F4; --bs-btn-hover-border-color: #536471;
+  --bs-btn-active-bg: rgba(239,243,244,.15); --bs-btn-active-color: #EFF3F4; --bs-btn-active-border-color: #536471;
 }
 .btn-outline-primary {
   --bs-btn-color: #1D9BF0; --bs-btn-border-color: #536471;
   --bs-btn-hover-bg: rgba(29,155,240,.1); --bs-btn-hover-color: #1D9BF0; --bs-btn-hover-border-color: #1D9BF0;
   --bs-btn-active-bg: rgba(29,155,240,.2); --bs-btn-active-color: #1D9BF0;
 }
-.btn-outline-light {
-  --bs-btn-color: #EFF3F4; --bs-btn-border-color: #536471;
-  --bs-btn-hover-bg: rgba(239,243,244,.1); --bs-btn-hover-color: #EFF3F4; --bs-btn-hover-border-color: #536471;
-}
-.btn-light {
-  --bs-btn-bg: #EFF3F4; --bs-btn-border-color: #EFF3F4; --bs-btn-color: #0F1419;
-  --bs-btn-hover-bg: #D7DBDC; --bs-btn-hover-border-color: #D7DBDC;
-}
 
-
+/* ---------- 3. Formularios, tarjetas y menús ---------- */
 .card { background: #000; border: 1px solid var(--bs-border-color); border-radius: 16px; box-shadow: none !important; }
 .form-control { background: #000; border: 1px solid #333639; color: #E7E9EA; border-radius: 6px; }
 .form-control:focus { background: #000; color: #E7E9EA; border-color: #1D9BF0; box-shadow: 0 0 0 1px #1D9BF0; }
 .form-control::placeholder { color: #71767B; }
-
-
-.x-navbar { background: rgba(0,0,0,.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--bs-border-color); }
-.x-navbar .nav-link.active { color: #fff; font-weight: 700; }
-
-
-.x-column { border-left: 1px solid var(--bs-border-color); border-right: 1px solid var(--bs-border-color); }
-.page-title { font-weight: 800; padding: 1rem; margin: 0; border-bottom: 1px solid var(--bs-border-color); }
-
-
-.tweet-card { border-bottom: 1px solid var(--bs-border-color); transition: background .15s; }
-.tweet-card:hover { background: rgba(255,255,255,.03); }
-.avatar { width: 40px; height: 40px; background: #1D9BF0; color: #fff; }
-
-
+.dropdown-menu {
+  --bs-dropdown-bg: #000; --bs-dropdown-color: #E7E9EA; --bs-dropdown-border-color: #2F3336;
+  --bs-dropdown-link-color: #E7E9EA; --bs-dropdown-link-hover-bg: rgba(239,243,244,.1); --bs-dropdown-link-hover-color: #fff;
+  border-radius: 16px; padding: .5rem 0; box-shadow: 0 0 15px rgba(255,255,255,.2), 0 0 3px 1px rgba(255,255,255,.15);
+}
+.dropdown-item { font-weight: 700; padding: .75rem 1rem; }
 .list-group-item { background: transparent; border-color: var(--bs-border-color); }
 .pagination {
   --bs-pagination-bg: transparent; --bs-pagination-border-color: #2F3336; --bs-pagination-color: #E7E9EA;
-  --bs-pagination-hover-bg: rgba(255,255,255,.05); --bs-pagination-hover-color: #fff;
+  --bs-pagination-hover-bg: rgba(255,255,255,.05); --bs-pagination-hover-color: #fff; --bs-pagination-hover-border-color: #2F3336;
   --bs-pagination-active-bg: #1D9BF0; --bs-pagination-active-border-color: #1D9BF0;
   --bs-pagination-disabled-bg: transparent; --bs-pagination-disabled-border-color: #2F3336;
+  --bs-pagination-focus-bg: transparent; --bs-pagination-focus-color: #fff;
+}
+
+/* Barra superior (solo en login y registro) */
+.x-navbar { background: rgba(0,0,0,.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--bs-border-color); }
+.x-navbar .nav-link.active { color: #fff; font-weight: 700; }
+
+/* ---------- 4. Estructura de 3 columnas ---------- */
+.x-shell { display: grid; grid-template-columns: 275px minmax(0, 600px) 350px; justify-content: center; min-height: 100vh; }
+.x-main { border-left: 1px solid var(--bs-border-color); border-right: 1px solid var(--bs-border-color); min-height: 100vh; }
+
+/* Columna izquierda */
+.x-sidebar { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; gap: .25rem; padding: .5rem .75rem 1rem; }
+.x-logo { width: 52px; height: 52px; display: grid; place-items: center; border-radius: 50%; font-size: 1.9rem; font-weight: 800; color: #fff; text-decoration: none !important; }
+.x-logo:hover { background: rgba(239,243,244,.1); color: #fff; }
+.x-nav-link { display: inline-flex; align-items: center; gap: 1.25rem; width: fit-content; padding: .75rem 1.1rem; border-radius: 9999px; font-size: 1.25rem; color: var(--bs-body-color); text-decoration: none !important; transition: background .15s; }
+.x-nav-link i { font-size: 1.6rem; }
+.x-nav-link:hover { background: rgba(239,243,244,.1); color: #fff; }
+.x-nav-link.active { font-weight: 800; color: #fff; }
+.x-post-btn { margin-top: 1rem; padding: .9rem 1rem; font-size: 1.05rem; }
+.x-user-chip { display: flex; align-items: center; gap: .75rem; width: 100%; padding: .75rem; border: 0; border-radius: 9999px; background: transparent; color: inherit; text-align: left; }
+.x-user-chip:hover { background: rgba(239,243,244,.1); }
+.x-user-text { min-width: 0; flex-direction: column; line-height: 1.2; }
+.x-user-text strong, .x-user-text span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Columna derecha */
+.x-right { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; gap: 1rem; padding: .75rem 1.5rem; overflow-y: auto; }
+.x-card { background: #16181C; border-radius: 16px; padding: 1rem 0 .5rem; }
+.x-card-title { font-size: 1.25rem; font-weight: 800; padding: 0 1rem .75rem; margin: 0; }
+.x-suggestion { display: flex; align-items: center; gap: .75rem; padding: .6rem 1rem; transition: background .15s; }
+.x-suggestion:hover { background: rgba(255,255,255,.03); }
+.x-suggestion-info { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.25; color: var(--bs-body-color); text-decoration: none !important; }
+.x-suggestion-info:hover { color: #fff; }
+
+/* Buscador / formulario "seguir por usuario" en forma de píldora */
+.x-follow-form .x-pill { display: flex; align-items: center; gap: .5rem; padding: .25rem .25rem .25rem 1rem; border: 1px solid transparent; border-radius: 9999px; background: #000; }
+.x-follow-form .x-pill:focus-within { border-color: #1D9BF0; }
+.x-follow-form input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; color: var(--bs-body-color); padding: .5rem 0; }
+.x-follow-form input::placeholder { color: #71767B; }
+
+/* ---------- 5. Contenido central ---------- */
+.x-page-header { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 1rem; min-height: 53px; padding: .5rem 1rem; background: rgba(0,0,0,.75); backdrop-filter: blur(12px); border-bottom: 1px solid var(--bs-border-color); }
+.x-page-title { font-size: 1.25rem; font-weight: 800; margin: 0; }
+.x-icon-btn { width: 36px; height: 36px; display: grid; place-items: center; border: 0; border-radius: 50%; background: transparent; color: var(--bs-body-color); font-size: 1.2rem; }
+.x-icon-btn:hover { background: rgba(239,243,244,.1); }
+
+/* Pestañas (Para ti / Siguiendo / Posts) */
+.x-tabs { display: flex; border-bottom: 1px solid var(--bs-border-color); }
+.x-tabs-sticky { position: sticky; top: 0; z-index: 10; background: rgba(0,0,0,.75); backdrop-filter: blur(12px); }
+.x-tab { position: relative; flex: 1; padding: 1rem; border: 0; background: transparent; text-align: center; font-weight: 600; color: var(--bs-secondary-color); transition: background .15s; }
+button.x-tab:hover { background: rgba(255,255,255,.04); }
+.x-tab.active { color: #fff; font-weight: 800; }
+.x-tab.active::after { content: ""; position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); width: 56px; height: 4px; border-radius: 9999px; background: #1D9BF0; }
+
+/* Caja para escribir un tweet */
+.x-composer { display: flex; gap: .75rem; padding: 1rem; border-bottom: 1px solid var(--bs-border-color); }
+.x-composer-input { width: 100%; padding: .5rem 0; border: 0; outline: 0; resize: none; background: transparent; color: var(--bs-body-color); font-size: 1.25rem; }
+.x-composer-input::placeholder { color: #71767B; }
+.x-composer-footer { display: flex; align-items: center; justify-content: space-between; margin-top: .5rem; padding-top: .75rem; border-top: 1px solid var(--bs-border-color); }
+
+/* Tweets */
+.tweet-card { border-bottom: 1px solid var(--bs-border-color); transition: background .15s; }
+.tweet-card:hover { background: rgba(255,255,255,.03); }
+.tweet-body { white-space: pre-wrap; word-break: break-word; }
+.avatar { width: 40px; height: 40px; background: #1D9BF0; color: #fff; }
+
+/* Perfil de usuario */
+.x-banner { height: 150px; background: linear-gradient(135deg, #1D9BF0, #0b3d62); }
+.x-profile-avatar { margin-top: -60px; border: 4px solid #000; border-radius: 50%; line-height: 0; }
+
+/* Botón de repost bajo cada tweet */
+.x-action { display: inline-flex; align-items: center; gap: .4rem; padding: .25rem .5rem; margin-left: -.5rem; border: 0; border-radius: 9999px; background: transparent; color: var(--bs-secondary-color); font-size: .9rem; }
+.x-action:hover:not(:disabled) { color: #00BA7C; background: rgba(0,186,124,.1); }
+.x-action i { font-size: 1.15rem; }
+.x-action-reposted { color: #00BA7C; font-weight: 700; }
+
+/* ---------- 6. Pantallas medianas ---------- */
+@media (max-width: 1199.98px) {
+  .x-shell { grid-template-columns: 88px minmax(0, 600px) 350px; }
+  .x-nav-link { padding: .75rem; }
+  .x-post-btn { padding: .75rem 0; }
+}
+@media (max-width: 991.98px) {
+  .x-shell { grid-template-columns: 88px minmax(0, 600px); }
+  .x-right { display: none; }
 }
