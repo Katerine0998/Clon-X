@@ -12,8 +12,7 @@ export const NavBar = () => {
   };
 
   return (
-
-<nav className="navbar navbar-expand-md navbar-dark sticky-top x-navbar">
+    <nav className="navbar navbar-expand-md navbar-dark sticky-top x-navbar">
       <div className="container">
         {/* Logo: link back to the home page */}
         <Link to="/" className="navbar-brand fs-3 me-2" aria-label="Ir al inicio">
@@ -33,9 +32,7 @@ export const NavBar = () => {
         </button>
 
         <div className="collapse navbar-collapse" id="mainNavbar">
-        
           <ul className="navbar-nav me-auto">
-            
             {authState.logged && (
               <>
                 <li className="nav-item">
@@ -48,7 +45,6 @@ export const NavBar = () => {
                     Feed
                   </NavLink>
                 </li>
-
                 <li className="nav-item">
                   <NavLink to="/tweet" className="nav-link">
                     Tweet
@@ -61,11 +57,9 @@ export const NavBar = () => {
             {authState.logged ? (
               <>
                 <li className="nav-item">
-              
                   <span className="navbar-text text-secondary me-md-3">@{authState.user?.username || authState.user?.email}</span>
                 </li>
                 <li className="nav-item">
-            
                   <button type="button" className="btn btn-outline-light btn-sm" onClick={onLogout}>
                     Cerrar sesión
                   </button>
